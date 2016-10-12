@@ -1,0 +1,43 @@
+
+\iflatexml
+% \documentclass[]{sigchi} % Not (yet) supported by LaTeXML.
+\fi
+% \usepackage[]{balance} % Not (yet) supported by LaTeXML.
+  % to better equalize the last page
+\usepackage[]{graphics}
+ % for EPS, load graphicx instead
+% \usepackage[]{times} % Not (yet) supported by LaTeXML.
+    % comment if you want LaTeX's default font
+\usepackage[]{url}
+      % llt: nicely formatted URLs
+\makeatletter
+\def\url@leostyle{%
+  \@ifundefined{selectfont}{\def\UrlFont{\sf}}{\def\UrlFont{\small\bf\ttfamily}}}
+
+\makeatother
+\urlstyle{leo}
+\def\pprw{8.5in}
+
+\def\pprh{11in}
+
+\special{papersize=\pprw,\pprh}
+\setlength{\paperwidth}{\pprw}
+\setlength{\paperheight}{\pprh}
+\setlength{\pdfpagewidth}{\pprw}
+\setlength{\pdfpageheight}{\pprh}
+\usepackage[pdftex]{hyperref}
+
+\hypersetup{
+pdftitle={SIGCHI Conference Proceedings Format},
+pdfauthor={LaTeX},
+pdfkeywords={SIGCHI, proceedings, archival format},
+bookmarksnumbered,
+pdfstartview={FitH},
+colorlinks,
+citecolor=black,
+filecolor=black,
+linkcolor=black,
+urlcolor=black,
+breaklinks=true,
+}
+\newcommand\tabhead[1][]{\small\textbf{#1}}

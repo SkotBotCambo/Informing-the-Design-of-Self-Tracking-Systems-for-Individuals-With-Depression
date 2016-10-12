@@ -1,0 +1,82 @@
+\section{Method}
+
+\subsection{Goals}
+
+\begin{itemize}
+\item Understand how a user's experience of depression relates to observations made from 
+the Purple Robot context-sensing smartphone application.
+\item Determine the feasibility of building a smartphone-based passive mood tracking system.
+\end{itemize}
+
+\subsection{Recruitment}
+Participants in our study were recruited through a thread 
+for those living with depression on the popular social media platform, Reddit.
+On the thread, we advertised participation in a study that uses 
+mobile phone technology to help users with their depression. Those
+who were interested filled out a short online survey 
+about their use of technology as well as a PHQ-8 depression assessment survey.
+Applicants who scored a 9 or above on the PHQ-8 were invited to participate
+in the study.
+
+\subsection{Weekly Interviews}
+These interviews are semi-structured for the following goals :
+
+\begin{itemize}
+\item To determine whether the participant is healthy enough to continue participation in the study
+\item To get a general high-level sense of how the participant retrospectively feels about their week
+\item To understand how or if the participant uses technology to manage their health
+\item To understand how the daily ecological momentary assessments compare and contrast to the high-level
+description from the interview
+\item To understand how the passively collected smartphone data compares and contrasts to their 
+experience of depression
+\item to explore topics concerning the experience of depression and how technology could help as they come up naturally in conversation
+\end{itemize}
+
+Each week participants began the interview by feeling out a PHQ-9 depression
+assessment survey so that either immediate help can be sought or 
+sensitive topics could be avoided. The initial interview
+was also used as an onboarding process to help the user 
+install the application, understand how the context-sensing application
+works and how the experience sampling application should be used.
+After the first week, the participant was shown their experience
+sampling responses at the end of the interview and ask to talk 
+about patterns they have noticed.
+
+\subsection{Experience Sampling}
+The experience sampling survey uses a series of 
+likert scale and open-ended 
+survey items to understand the
+user's daily experience as it relates to 
+mood, stress, sociability, and exercise.
+The likert scale responses are used to 
+give the machine learner a numeric label
+representing their day as it relates to the survey item.
+One section asks the user to describe in an open-ended
+response and rate in a likert response their happiest 
+moment of the day while another does the same for their
+most stressful moment. This allows us to help the user 
+identify moments that could be good talking points during
+the weekly interviews.
+
+\subsection{Machine Learning}
+For a machine learning system to learn to detect a high-level concept (e.g. depression)
+from a series of passively collected low-level data (e.g. sensor data), an approach 
+called supervised learning is typically used.  A supervised learning system uses
+an algorithm to learn a concept by first “training” on a series of observations with their known corresponding 
+labels. This training process generates a model which is then used to estimate which label is most
+likely to be associated with a future observation.  In this study, we use the likert-scale
+numeric experience sampling survey responses as the labels for the machine learning task.
+
+The observed data from the smartphone is first transformed into a set of ``features''.  These
+features are higher-level aggregate representations of the raw data coming from the smartphone.
+There are 197 features total which are derived from the GPS location data, the application usage data,
+the device state data (e.g. Screen is on/off, Charging, etc.), 
+and communications data (e.g.: outgoing calls, incoming text messages, etc.).
+
+Our study uses commonly used learning algorithms such as K-nearest neighbors (KNN), Support Vector Machines (SVM), and Random Forest Decision Trees (RFDT) by having each construct a model in a leave-one-participant out fashion and using this model to predict the mood of the left out participant.  After doing this with each participant as the test participant, the accuracies are averaged and compared to a majority prediction baseline where the majority mood is assumed to always be true.
+
+To evaluate these state of the art methods in determining mood context from passively collected smartphone data, I used a leave one-participant-out evaluation method in which a model was trained using all data from all of the participants except for one and that model is used to predict the context of the left out participant.  This is repeated with each participant being left out until each participant has been used for the evaluation process.  Finally, the averages of root mean squared error in each iteration are used as the evaluation criteria.  This is done for each of the response items in the experience sampling survey that we are trying to predict.  The image of the results below are from predictions which used only one person’s data, but a final results graph of the evaluation methodology might look something like this, but with error bars.
+
+Our approach to building a machine learning system to identify an end-user’s mood focused on problems that have been identified by previous research in context-sensing and activity recognition. The first problem occurs when systems are designed to immediately be able to detect a user’s context without ever having seen data from this user.  This is done by building a “universal” model which is an aggregate of concepts learned from data gathered in a more constrained setting like a laboratory or study like this one.  While these universal models provide the convenience of performing right out of the box, they are generally more error prone.
+
+The second problem is that the data we collect to represent a single day in a participant’s life is very multi-modal including location, motion, physical orientation, communications (SMS \& calls), and mobile application usage.  Each of these are used to create a set of features that describe various aspects of a user’s day.  However, it is not known whether these features actually aid the learning algorithm in understanding a concept. Knowing which features are helping the learning algorithm to understand a concept and which are obfuscating it can help developers determine not only which features to use but what data to collect.  To identify redundant features, we used a feature selection technique in which a number of training and testing iterations are performed each with a different feature left out while recording the change in accuracy each time.
